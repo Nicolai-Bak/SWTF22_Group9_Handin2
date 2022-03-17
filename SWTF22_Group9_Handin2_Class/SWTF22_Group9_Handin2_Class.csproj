@@ -6,4 +6,8 @@
         <UseWPF>true</UseWPF>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\SWTF22_Group9_Handin2\SWTF22_Group9_Handin2.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWTF22_Group9_Handin2", "SW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWTF22_Group9_Handin2.Test.Unit", "SWTF22_Group9_Handin2.Test.Unit\SWTF22_Group9_Handin2.Test.Unit.csproj", "{4CD19F84-AA9D-4404-B914-677250011B55}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWTF22_Group9_Handin2_Class", "SWTF22_Group9_Handin2_Class\SWTF22_Group9_Handin2_Class.csproj", "{70696E59-34A8-41C9-8EE7-90245DB36360}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4CD19F84-AA9D-4404-B914-677250011B55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CD19F84-AA9D-4404-B914-677250011B55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CD19F84-AA9D-4404-B914-677250011B55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70696E59-34A8-41C9-8EE7-90245DB36360}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70696E59-34A8-41C9-8EE7-90245DB36360}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70696E59-34A8-41C9-8EE7-90245DB36360}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70696E59-34A8-41C9-8EE7-90245DB36360}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

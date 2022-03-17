@@ -7,7 +7,6 @@ namespace SWTF22_Group9_Handin2.Test.Unit
         [SetUp]
         public void Setup()
         {
-
         }
 
         [Test]

@@ -12,6 +12,7 @@ namespace SWTF22_Group9_Handin2.Test.Unit
         [Test]
         public void Test1()
         {
+
             Assert.Pass();
         }
     }

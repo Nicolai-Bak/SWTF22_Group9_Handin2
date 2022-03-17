@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace UsbSimulator.Test
 {
+
     [TestFixture]
     public class TestUsbChargerSimulator
     {

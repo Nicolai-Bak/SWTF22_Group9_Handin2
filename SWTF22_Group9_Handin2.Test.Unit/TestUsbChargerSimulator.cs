@@ -12,7 +12,6 @@ namespace UsbSimulator.Test
     [TestFixture]
     public class TestUsbChargerSimulator
     {
-
         private UsbChargerSimulator _uut;
         [SetUp]
         public void Setup()

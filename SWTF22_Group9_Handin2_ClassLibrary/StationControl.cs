@@ -3,114 +3,101 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Ladeskab;
+using SWTF22_Group9_Handin2_ClassLibrary;
 
-namespace Ladeskab
+namespace SWTF22_Group9_Handin2_ClassLibrary
 {
+    public abstract class State
+    {
+        public void HandleRfidEvent(StationControl stationControl, RfidEventArgs args) { }
+        public void HandleDoorEvent(StationControl stationControl, DoorEventArgs args) { }
+    }
+
+    public class Available : State
+    {
+        public void HandleRfidEvent(StationControl stationControl, RfidEventArgs args)
+        {
+            if (stationControl.Charger.Connected)
+            {
+                stationControl.Door.LockDoor();
+                stationControl.Charger.StartCharging();
+                stationControl.OldId = args.Id;
+                stationControl.Log.LogDoorLocked(args.Id);
+                stationControl.Display.DisplayMsg("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
+                stationControl.State = new Locked();
+            }
+            else
+            {
+                stationControl.Display.DisplayMsg("Din telefon er ikke ordentlig tilsluttet. Prøv igen.");
+            }
+        }
+        public void HandleDoorEvent(StationControl stationControl, DoorEventArgs args)
+        {
+            stationControl.Display.DisplayMsg("Tilslut telefon");
+            stationControl.State = new DoorOpen();
+        }
+    }
+    public class Locked : State
+    {
+        public void HandleRfidEvent(StationControl stationControl, RfidEventArgs args)
+        {
+            if (args.Id == stationControl.OldId)
+            {
+                stationControl.Charger.StopCharging();
+                stationControl.Door.UnlockDoor();
+                stationControl.Log.LogDoorUnlocked(args.Id);
+                stationControl.Display.DisplayMsg("Tag din telefon ud af skabet og luk døren");
+                stationControl.State = new Available();
+            }
+            else
+            {
+                stationControl.Display.DisplayMsg("Forkert RFID tag");
+            }
+        }
+    }
+    public class DoorOpen : State
+    {
+        public void HandleDoorEvent(StationControl stationControl, DoorEventArgs args)
+        {
+            stationControl.Display.DisplayMsg("Indlæs RFID");
+            stationControl.State = new Available();
+        }
+    }
+
     public class StationControl
     {
-        // Enum med tilstande ("states") svarende til tilstandsdiagrammet for klassen
-        private enum LadeskabState
-        {
-            Available,
-            Locked,
-            DoorOpen
-        };
-
-        //         // Her mangler flere member variable
-        private LadeskabState _state;
-        private int _oldId;
-        private bool _isDoorOpen;
-        private bool _isDoorLocked;
-
-        private IChargeControl _charger;
-        private IDoor _door;
-        private ILog _log;
-        private IDisplay _display;
+        public int OldId { get; set; }
+        public State State { get; set; }
+        public IChargeControl Charger { get; set; }
+        public IDoor Door { get; set; }
+        public ILog Log { get; set; }
+        public IDisplay Display { get; set; }
 
         public StationControl(IChargeControl charger,
                               IDoor door,
                               ILog log,
                               IDisplay display)
         {
-            _charger = charger;
-            _door = door;
-            _log = log;
-            _display = display;
+            Charger = charger;
+            Door = door;
+            Log = log;
+            Display = display;
 
-            _door.UnlockDoor();
-            _display.DisplayMsg("Indlæs RFID");
+            Door.UnlockDoor();
+            Display.DisplayMsg("Indlæs RFID");
         }
 
 
         // Eksempel på event handler for eventet "RFID Detected" fra tilstandsdiagrammet for klassen
-        private void OnRfidEvent(RfidEventArgs args)
+        private void OnRfidEvent(object o, RfidEventArgs args)
         {
-            switch (_state)
-            {
-                case LadeskabState.Available:
-                    // Check for ladeforbindelse
-                    if (_charger.Connected)
-                    {
-                        _door.LockDoor();
-                        _charger.StartCharging();
-                        _oldId = args.Id;
-                        _log.LogDoorLocked(args.Id);
-                        _display.DisplayMsg("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
-                        _state = LadeskabState.Locked;
-                    }
-                    else
-                    {
-                        _display.DisplayMsg("Din telefon er ikke ordentlig tilsluttet. Prøv igen.");
-                    }
-                    break;
-
-                case LadeskabState.DoorOpen:
-                    // Ignore
-                    break;
-
-                case LadeskabState.Locked:
-                    // Check for correct ID
-                    if (args.Id == _oldId)
-                    {
-                        _charger.StopCharging();
-                        _door.UnlockDoor();
-                        _log.LogDoorUnlocked(args.Id);
-                        _display.DisplayMsg("Tag din telefon ud af skabet og luk døren");
-                        _state = LadeskabState.Available;
-                    }
-                    else
-                    {
-                        _display.DisplayMsg("Forkert RFID tag");
-                    }
-                    break;
-            }
+            State.HandleRfidEvent(this, RfidEventArgs args);
         }
         //
         //         // Her mangler de andre trigger handlere
         private void OnDoorEvent(DoorEventArgs args)
         {
-            switch (_state)
-            {
-                case LadeskabState.Available:
-                    if (args.IsOpen)
-                    {
-                        _display.DisplayMsg("Tilslut telefon");
-                    }
-                    else
-                    {
-                        _display.DisplayMsg("Indlæs RFID");
-                    }
-                    break;
-
-                case LadeskabState.Locked:
-
-                    break;
-
-                case LadeskabState.DoorOpen:
-                    break;
-
-            }
+            State.HandleDoorEvent(this, DoorEventArgs args);
         }
     }
 }

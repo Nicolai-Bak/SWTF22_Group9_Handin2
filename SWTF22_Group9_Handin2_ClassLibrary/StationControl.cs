@@ -73,7 +73,7 @@ namespace SWTF22_Group9_Handin2_ClassLibrary
         public ILog Log { get; set; }
         public IDisplay Display { get; set; }
 
-        public StationControl(IChargeControl charger, IDoor door, ILog log, IDisplay display)
+        public StationControl(IChargeControl charger, IDoor door, ILog log, IDisplay display, IRfidReader rfidReader)
         {
             Charger = charger;
             Door = door;
@@ -83,6 +83,9 @@ namespace SWTF22_Group9_Handin2_ClassLibrary
             OldId = 0;
             Door.UnlockDoor();
             Display.DisplayMsg("Indlæs RFID");
+
+            door.DoorEvent += OnDoorEvent;
+            rfidReader.RfidEvent += OnRfidEvent;
         }
 
 

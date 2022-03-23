@@ -9,7 +9,7 @@ namespace UsbSimulator
 
         void StopCharging();
 
-        bool isConnected();
+        bool IsConnected();
 
         void OnCurrentEvent(object o, CurrentEventArgs args);
     }
@@ -17,13 +17,13 @@ namespace UsbSimulator
     public class ChargeControl : IChargeControl
     {
         private IUsbCharger _usbCharger;
-
         private IDisplay _display;
 
         public ChargeControl(IUsbCharger usbCharger, IDisplay display)
         {
             _usbCharger = usbCharger;
             _display = display;
+            usbCharger.CurrentValueEvent += OnCurrentEvent;
         }
 
         public void StartCharging()
@@ -37,37 +37,36 @@ namespace UsbSimulator
             _usbCharger.StopCharge();
         }
 
-        public bool isConnected()
+        public bool IsConnected()
         {
-            if(_usbCharger.Connected)
+            if (_usbCharger.Connected)
                 return true;
             else
                 return false;
         }
 
-        void IChargeControl.OnCurrentEvent(object o, CurrentEventArgs args)
+        public void OnCurrentEvent(object o, CurrentEventArgs args)
         {
-            switch(args.Current)
+            if (args.Current == 0)
             {
-            case 0:
-                    this.StopCharging();
-                    break;
-            case <= 5:
+                StopCharging();
+            }
+            else if (args.Current <= 5)
+            {
+                StopCharging();
+                _display.DisplayMsg("Enheden er fuldt opladt");
+            }
+            else if (args.Current > 5)
+            {
+                if (args.Current <= 500)
+                {
+                    StartCharging();
+                }
+                else
+                {
                     StopCharging();
-                    _display.DisplayMsg("Enheden er fuldt opladt");
-                    break;
-            case > 5:
-                    if(args.Current <= 500)
-                    {
-                        StartCharging();
-                        break;
-                    }
-                    else
-                    {
-                        StopCharging();
-                        _display.DisplayMsg("ERROR40: KAN IKKE OPLADES KORREKT");
-                        break;
-                    }
+                    _display.DisplayMsg("ERROR40: KAN IKKE OPLADES KORREKT");
+                }
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using SWTF22_Group9_Handin2_ClassLibrary;
 
 namespace UsbSimulator
 {
@@ -10,53 +11,53 @@ namespace UsbSimulator
 
         bool isConnected();
 
-        void OnCurrentEvent(object o, CurrentEventsArg args);
+        void OnCurrentEvent(object o, CurrentEventArgs args);
     }
 
     public class ChargeControl : IChargeControl
     {
-        private IUSBCharger _usbCharger;
+        private IUsbCharger _usbCharger;
 
         private IDisplay _display;
 
-        public ChargeControl(IUSBCharger usbCharger, IDisplay display)
+        public ChargeControl(IUsbCharger usbCharger, IDisplay display)
         {
             _usbCharger = usbCharger;
             _display = display;
         }
 
-        void IChargeControl.StartCharging()
+        public void StartCharging()
         {
             _usbCharger.StartCharge();
             _display.DisplayMsg("Enheden oplader");
         }
 
-        void IChargeControl.StopCharging()
+        public void StopCharging()
         {
             _usbCharger.StopCharge();
         }
 
-        bool IChargeControl.isConnected()
+        public bool isConnected()
         {
-            if (_usbCharger.Connected)
+            if(_usbCharger.Connected)
                 return true;
             else
                 return false;
         }
 
-        void IChargeControl.OnCurrentEvent(object o, CurrentEventsArg args)
+        void IChargeControl.OnCurrentEvent(object o, CurrentEventArgs args)
         {
-            switch (args.Current)
+            switch(args.Current)
             {
-                case 0:
-                    StopCharging();
+            case 0:
+                    this.StopCharging();
                     break;
-                case <= 5:
+            case <= 5:
                     StopCharging();
                     _display.DisplayMsg("Enheden er fuldt opladt");
                     break;
-                case > 5:
-                    if (args.Current <= 500)
+            case > 5:
+                    if(args.Current <= 500)
                     {
                         StartCharging();
                         break;

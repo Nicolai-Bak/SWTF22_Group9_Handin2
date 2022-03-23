@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using SWTF22_Group9_Handin2_ClassLibrary;
@@ -18,32 +19,50 @@ public class TestLogToTxt
     [Test]
     public void SimulateLogDoorLocked_FileLengthIncreased()
     {
-        string previousLog = ReadLog();
+        if (File.Exists(LogToTxt._filePath))
+        {
+            string previousLog = ReadLog();
         
-        _uut.LogDoorLocked(1);
+            _uut.LogDoorLocked(1);
         
-        string newLog = ReadLog();
+            string newLog = ReadLog();
         
-        Assert.That(newLog.Length, Is.GreaterThan(previousLog.Length));
+            Assert.That(newLog.Length, Is.GreaterThan(previousLog.Length));
+        }
+        else
+        {
+            _uut.LogDoorLocked(1);
+            
+            Assert.IsTrue(File.Exists(LogToTxt._filePath));
+        }
     }
     
     [Test]
     public void SimulateLogDoorUnlocked_FileLengthIncreased()
     {
-        string previousLog = ReadLog();
+        if (File.Exists(LogToTxt._filePath))
+        {
+            string previousLog = ReadLog();
         
-        _uut.LogDoorUnlocked(1);
+            _uut.LogDoorUnlocked(1);
         
-        string newLog = ReadLog();
+            string newLog = ReadLog();
         
-        Assert.That(newLog.Length, Is.GreaterThan(previousLog.Length));
+            Assert.That(newLog.Length, Is.GreaterThan(previousLog.Length));
+        }
+        else
+        {
+            _uut.LogDoorUnlocked(1);
+            
+            Assert.IsTrue(File.Exists(LogToTxt._filePath));
+        }
     }
 
     private string ReadLog()
     {
         string log = "";
         
-        using (StreamReader r = File.OpenText("log.txt"))
+        using (StreamReader r = File.OpenText(LogToTxt._filePath))
         {
             string line;
             while ((line = r.ReadLine()) != null)

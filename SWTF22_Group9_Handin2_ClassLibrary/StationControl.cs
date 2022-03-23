@@ -18,7 +18,7 @@ namespace SWTF22_Group9_Handin2_ClassLibrary
     {
         public void HandleRfidEvent(StationControl stationControl, RfidEventArgs args)
         {
-            if (stationControl.Charger.Connected)
+            if (stationControl.Charger.IsConnected())
             {
                 stationControl.Door.LockDoor();
                 stationControl.Charger.StartCharging();
@@ -34,8 +34,15 @@ namespace SWTF22_Group9_Handin2_ClassLibrary
         }
         public void HandleDoorEvent(StationControl stationControl, DoorEventArgs args)
         {
-            stationControl.Display.DisplayMsg("Tilslut telefon");
-            stationControl.State = new DoorOpen();
+            if (args.IsOpen)
+            {
+                stationControl.Display.DisplayMsg("Tilslut telefon");
+                stationControl.State = new DoorOpen();
+            }
+            else
+            {
+                stationControl.Display.DisplayMsg("Fejl: Lukket dør blev lukket");
+            }
         }
     }
     public class Locked : State
@@ -60,8 +67,16 @@ namespace SWTF22_Group9_Handin2_ClassLibrary
     {
         public void HandleDoorEvent(StationControl stationControl, DoorEventArgs args)
         {
-            stationControl.Display.DisplayMsg("Indlæs RFID");
-            stationControl.State = new Available();
+            if (!args.IsOpen)
+            {
+                stationControl.Display.DisplayMsg("Indlæs RFID");
+                stationControl.State = new Available();
+
+            }
+            else
+            {
+                stationControl.Display.DisplayMsg("Fejl: Open dør blev åbnet");
+            }
         }
     }
 
@@ -85,8 +100,8 @@ namespace SWTF22_Group9_Handin2_ClassLibrary
             Door.UnlockDoor();
             Display.DisplayMsg("Indlæs RFID");
 
-            door.DoorEvent += OnDoorEvent;
             rfidReader.RfidEvent += OnRfidEvent;
+            door.DoorEvent += OnDoorEvent;
         }
 
 
@@ -97,7 +112,7 @@ namespace SWTF22_Group9_Handin2_ClassLibrary
         }
         //
         //         // Her mangler de andre trigger handlere
-        private void OnDoorEvent(DoorEventArgs args)
+        private void OnDoorEvent(object o, DoorEventArgs args)
         {
             State.HandleDoorEvent(this, args);
         }

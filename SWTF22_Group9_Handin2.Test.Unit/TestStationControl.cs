@@ -41,7 +41,7 @@ namespace SWTF22_Group9_Handin2.Test.Unit
             RfidEventArgs rfidEventArgs = new RfidEventArgs {Id = id};
 
             // Act
-            _chargeControl.Connected.Returns(connected);
+            _chargeControl.isConnected().Returns(connected);
             _rfidReader.RfidEvent += Raise.EventWith(rfidEventArgs);
             
             // Assert
@@ -65,7 +65,7 @@ namespace SWTF22_Group9_Handin2.Test.Unit
             RfidEventArgs rfidEventArgs = new RfidEventArgs { Id = id };
 
             // Act
-            _chargeControl.Connected.Returns(connected);
+            _chargeControl.isConnected().Returns(connected);
             _rfidReader.RfidEvent += Raise.EventWith(rfidEventArgs);
 
 
@@ -144,8 +144,9 @@ namespace SWTF22_Group9_Handin2.Test.Unit
             Assert.That(_uut.State.GetType(), Is.EqualTo(typeof(DoorOpen)));
         }
 
-        [TestCase(true)]
-        public void DoorEvent_StateAvailable(bool isOpen)
+        [TestCase(true, "Tilslut telefon")]
+        [TestCase(false, "Fejl: Lukket dør blev lukket")]
+        public void DoorEvent_StateAvailable(bool isOpen, string msg)
         {
             //Assert: dislay kaldt
             // Arrange
@@ -159,8 +160,15 @@ namespace SWTF22_Group9_Handin2.Test.Unit
 
             // Assert
             state.Received(1).HandleDoorEvent(_uut, doorEventArgs);
-            _display.Received(1).DisplayMsg("Tilslut telefon");
-            Assert.That(_uut.State.GetType(), Is.EqualTo(typeof(DoorOpen)));
+            _display.Received(1).DisplayMsg(msg);
+            if (isOpen)
+            {
+                Assert.That(_uut.State.GetType(), Is.EqualTo(typeof(DoorOpen)));
+            }
+            else
+            {
+                Assert.That(_uut.State.GetType(), Is.EqualTo(typeof(Available)));
+            }
         }
 
         //[TestCase(true)]
@@ -181,8 +189,9 @@ namespace SWTF22_Group9_Handin2.Test.Unit
         //    Assert.That(_uut.State.GetType(), Is.EqualTo(typeof(Locked)));
         //}
 
-        [TestCase(false)]
-        public void DoorEvent_StateDoorOpen(bool isOpen)
+        [TestCase(false, "Indlæs RFID")]
+        [TestCase(true, "Fejl: Open dør blev åbnet")]
+        public void DoorEvent_StateDoorOpen(bool isOpen, string msg)
         {
             //Assert: display kaldt
             // Arrange
@@ -196,8 +205,15 @@ namespace SWTF22_Group9_Handin2.Test.Unit
 
             // Assert
             state.Received(1).HandleDoorEvent(_uut, doorEventArgs);
-            _display.Received(1).DisplayMsg("Indlæs RFID");
-            Assert.That(_uut.State.GetType(), Is.EqualTo(typeof(Available)));
+            _display.Received(1).DisplayMsg(msg);
+            if (isOpen)
+            {
+                Assert.That(_uut.State.GetType(), Is.EqualTo(typeof(DoorOpen)));
+            }
+            else
+            {
+                Assert.That(_uut.State.GetType(), Is.EqualTo(typeof(Available)));
+            }
         }
     }
 }

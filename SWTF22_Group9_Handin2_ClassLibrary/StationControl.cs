@@ -1,12 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SWTF22_Group9_Handin2_ClassLibrary;
-using UsbSimulator;
-
-namespace SWTF22_Group9_Handin2_ClassLibrary;
+﻿namespace SWTF22_Group9_Handin2_ClassLibrary;
 
 public abstract class State
 {

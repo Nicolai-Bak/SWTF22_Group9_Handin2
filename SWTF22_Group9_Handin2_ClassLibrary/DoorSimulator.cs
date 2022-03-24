@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SWTF22_Group9_Handin2_ClassLibrary
+﻿namespace SWTF22_Group9_Handin2_ClassLibrary
 {
     public class DoorSimulator : IDoor
     {

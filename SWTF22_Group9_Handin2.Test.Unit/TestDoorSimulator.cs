@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using SWTF22_Group9_Handin2_ClassLibrary;
-using NSubstitute;
 
 namespace SWTF22_Group9_Handin2.Test.Unit
 {

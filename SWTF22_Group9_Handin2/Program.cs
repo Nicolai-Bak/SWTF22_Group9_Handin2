@@ -4,13 +4,13 @@ using SWTF22_Group9_Handin2_ClassLibrary;
 using UsbSimulator;
 
 UsbChargerSimulator usbCharger = new UsbChargerSimulator();
-//ChargeControl chargeControl = new ChargeControl(usbCharger);
 DoorSimulator door = new DoorSimulator();
 RfidReaderSimulator rfidReader = new RfidReaderSimulator();
 DisplaySimulator display = new DisplaySimulator();
+ChargeControl chargeControl = new ChargeControl(usbCharger, display);
 LogToTxt log = new LogToTxt();
 
-//StationControl stationControl = new StationControl(chargeControl, door, log, display, rfidReader);
+StationControl stationControl = new StationControl(chargeControl, door, log, display, rfidReader);
 
 bool finish = false;
 

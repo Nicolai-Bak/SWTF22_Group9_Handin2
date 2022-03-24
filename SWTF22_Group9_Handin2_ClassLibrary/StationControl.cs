@@ -10,76 +10,76 @@ namespace SWTF22_Group9_Handin2_ClassLibrary;
 
 public abstract class State
 {
-    public virtual void HandleRfidEvent(StationControl stationControl, RfidEventArgs args) { }
-    public virtual void HandleDoorEvent(StationControl stationControl, DoorEventArgs args) { }
+    public virtual void HandleRfidEvent(StationControl s, RfidEventArgs a) { }
+    public virtual void HandleDoorEvent(StationControl s, DoorEventArgs a) { }
 }
 
 public class Available : State
 {
-    public override void HandleRfidEvent(StationControl stationControl, RfidEventArgs args)
+    public override void HandleRfidEvent(StationControl s, RfidEventArgs a)
     {
-        if (stationControl.Charger.isConnected())
+        if (s.Charger.isConnected())
         {
-            stationControl.Door.LockDoor();
-            stationControl.Charger.StartCharging();
-            stationControl.OldId = args.Id;
-            stationControl.Log.LogDoorLocked(args.Id);
-            stationControl.Display.DisplayMsg("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
-            stationControl.State = new Locked();
+            s.Door.LockDoor();
+            s.Charger.StartCharging();
+            s.OldId = a.Id;
+            s.Log.LogDoorLocked(a.Id);
+            s.Display.DisplayMsg("Skabet er låst og din telefon lades. Brug dit RFID tag til at låse op.");
+            s.State = new Locked();
         }
         else
         {
-            stationControl.Display.DisplayMsg("Din telefon er ikke ordentlig tilsluttet. Prøv igen.");
+            s.Display.DisplayMsg("Din telefon er ikke ordentlig tilsluttet. Prøv igen.");
         }
     }
-    public override void HandleDoorEvent(StationControl stationControl, DoorEventArgs args)
+    public override void HandleDoorEvent(StationControl s, DoorEventArgs a)
     {
-        if (args.States == DoorStates.DoorOpen)
+        if (a.States == DoorStates.DoorOpen)
         {
-            stationControl.Display.DisplayMsg("Tilslut telefon");
-            stationControl.State = new DoorOpen();
+            s.Display.DisplayMsg("Tilslut telefon");
+            s.State = new DoorOpen();
         }
-        else if (args.States == DoorStates.DoorClosed)
+        else if (a.States == DoorStates.DoorClosed)
         {
-            stationControl.Display.DisplayMsg("Fejl: Lukket dør blev lukket");
+            s.Display.DisplayMsg("Fejl: Lukket dør blev lukket");
         }
     }
 }
 public class Locked : State
 {
-    public override void HandleRfidEvent(StationControl stationControl, RfidEventArgs args)
+    public override void HandleRfidEvent(StationControl s, RfidEventArgs a)
     {
-        if (args.Id == stationControl.OldId)
+        if (a.Id == s.OldId)
         {
-            stationControl.Charger.StopCharging();
-            stationControl.Door.UnlockDoor();
-            stationControl.Log.LogDoorUnlocked(args.Id);
-            stationControl.Display.DisplayMsg("Tag din telefon ud af skabet og luk døren");
-            stationControl.State = new Available();
+            s.Charger.StopCharging();
+            s.Door.UnlockDoor();
+            s.Log.LogDoorUnlocked(a.Id);
+            s.Display.DisplayMsg("Tag din telefon ud af skabet og luk døren");
+            s.State = new Available();
         }
         else
         {
-            stationControl.Display.DisplayMsg("Forkert RFID tag");
+            s.Display.DisplayMsg("Forkert RFID tag");
         }
     }
 }
 public class DoorOpen : State
 {
-    public override void HandleDoorEvent(StationControl stationControl, DoorEventArgs args)
+    public override void HandleDoorEvent(StationControl s, DoorEventArgs a)
     {
-        if (args.States == DoorStates.DoorClosed)
+        if (a.States == DoorStates.DoorClosed)
         {
-            stationControl.Display.DisplayMsg("Indlæs RFID");
-            stationControl.State = new Available();
+            s.Display.DisplayMsg("Indlæs RFID");
+            s.State = new Available();
 
         }
-        else if (args.States == DoorStates.DoorOpen)
+        else if (a.States == DoorStates.DoorOpen)
         {
-            stationControl.Display.DisplayMsg("Fejl: Åben dør blev åbnet");
+            s.Display.DisplayMsg("Fejl: Åben dør blev åbnet");
         }
         else
         {
-            stationControl.Display.DisplayMsg("Fejl: Åben dør blev låst");
+            s.Display.DisplayMsg("Fejl: Åben dør blev låst");
         }
     }
 }

@@ -1,9 +1,6 @@
-﻿using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-using NSubstitute;
-using NSubstitute.ReceivedExtensions;
+﻿using NSubstitute;
 using NUnit.Framework;
 using SWTF22_Group9_Handin2_ClassLibrary;
-using UsbSimulator;
 
 namespace SWTF22_Group9_Handin2.Test.Unit
 {

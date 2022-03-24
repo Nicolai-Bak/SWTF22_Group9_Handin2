@@ -4,17 +4,7 @@ public interface IDoor
 {
     public event EventHandler<DoorEventArgs> DoorEvent;
 
-    public void DoorChangedEvent(DoorEventArgs e);
-
-    public void OnDoorOpen();
-
-    public void OnDoorClose();
-
     public void LockDoor();
 
     public void UnlockDoor();
-
-
-
-
 }

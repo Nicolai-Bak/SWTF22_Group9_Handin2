@@ -1,32 +1,30 @@
 ﻿using NUnit.Framework;
 using SWTF22_Group9_Handin2_ClassLibrary;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NSubstitute;
-using NUnit.Framework;
+using System.IO;
 
-namespace SWTF22_Group9_Handin2.Test.Unit
+namespace SWTF22_Group9_Handin2.Test.Unit;
+
+[TestFixture]
+public class TestDisplay
 {
-    [TestFixture]
-    public class TestDisplay
+    private DisplaySimulator _uut;
+    [SetUp]
+    public void Setup()
     {
-        private IDisplay _display;
-        [SetUp]
-        public void Setup()
-        {
-            _display = Substitute.For<IDisplay>();
-        }
+        _uut = new DisplaySimulator();
+    }
+    
+    [Test]
+    public void DisplayMsg_MsgSentToConsole()
+    {
+        var msg = "Test";
 
-        [Test]
-        public void Display_DisplayMsg_Prints_String()
-        {
-            var msg = "Test";
-            _display.DisplayMsg(msg);
-            _display.Received(1).DisplayMsg(msg);
-        }
-
+        var stringWriter = new StringWriter();
+        Console.SetOut(stringWriter);
+        
+        _uut.DisplayMsg(msg);
+        
+        Assert.AreEqual(msg + "\r\n", stringWriter.ToString());
     }
 }

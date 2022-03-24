@@ -1,7 +1,4 @@
-﻿using System;
-using SWTF22_Group9_Handin2_ClassLibrary;
-
-namespace UsbSimulator
+﻿namespace SWTF22_Group9_Handin2_ClassLibrary
 {
     public interface IChargeControl
     {

@@ -1,6 +1,4 @@
-﻿using SWTF22_Group9_Handin2_ClassLibrary;
-
-namespace UsbSimulator;
+﻿namespace SWTF22_Group9_Handin2_ClassLibrary;
 
 public class ChargeControl : IChargeControl
 {
@@ -12,6 +10,7 @@ public class ChargeControl : IChargeControl
     {
         _usbCharger = usbCharger;
         _display = display;
+        _usbCharger.CurrentValueEvent += OnCurrentEvent;
     }
 
     public void StartCharging()
@@ -25,7 +24,7 @@ public class ChargeControl : IChargeControl
         _usbCharger.StopCharge();
     }
 
-    public bool isConnected()
+    public bool IsConnected()
     {
         if(_usbCharger.Connected)
             return true;
@@ -33,7 +32,7 @@ public class ChargeControl : IChargeControl
             return false;
     }
 
-    void IChargeControl.OnCurrentEvent(object o, CurrentEventArgs args)
+    public void OnCurrentEvent(object o, CurrentEventArgs args)
     {
         switch(args.Current)
         {

@@ -1,8 +1,8 @@
-﻿using NUnit.Framework;
-using System.Threading;
+﻿using System.Threading;
+using NUnit.Framework;
 using SWTF22_Group9_Handin2_ClassLibrary;
 
-namespace UsbSimulator.Test
+namespace SWTF22_Group9_Handin2.Test.Unit
 {
 
     [TestFixture]

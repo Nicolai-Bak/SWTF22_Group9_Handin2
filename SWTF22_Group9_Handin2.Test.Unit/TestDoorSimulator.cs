@@ -14,6 +14,7 @@ namespace SWTF22_Group9_Handin2.Test.Unit
     public class TestDoorSimulator
     {
         private DoorSimulator _uut;
+
         [SetUp]
         public void Setup()
         {
@@ -26,7 +27,7 @@ namespace SWTF22_Group9_Handin2.Test.Unit
         {
             _uut.doorstate = DoorStates.DoorLocked;
             _uut.UnlockDoor();
-            Assert.That(_uut.doorstate == DoorStates.DoorClosed); 
+            Assert.That(_uut.doorstate == DoorStates.DoorClosed);
         }
 
         [Test]
@@ -39,7 +40,6 @@ namespace SWTF22_Group9_Handin2.Test.Unit
 
 
         //Test of LockDoor
-
         [Test]
         public void LockDoorWhileClosed()
         {
@@ -56,100 +56,50 @@ namespace SWTF22_Group9_Handin2.Test.Unit
             Assert.That(_uut.doorstate == DoorStates.DoorOpen);
         }
 
-
-
         //Test of OnDoorOpen
-
         [Test]
         public void OnDoorOpenWhileClosed()
         {
             _uut.doorstate = DoorStates.DoorClosed;
             _uut.OnDoorOpen();
             Assert.That(_uut.doorstate == DoorStates.DoorOpen);
-
         }
 
-      
         [Test]
         public void OnDoorOpenWhileOpen()
         {
-
             List<DoorStates> receivedEvents = new List<DoorStates>();
 
-            _uut.DoorEvent += delegate (object sender, DoorEventArgs e)
-            {
-                receivedEvents.Add(e.States);
-            };
+            _uut.DoorEvent += delegate(object sender, DoorEventArgs e) { receivedEvents.Add(e.States); };
 
             _uut.doorstate = DoorStates.DoorOpen;
             _uut.OnDoorOpen();
 
             Assert.AreEqual(0, receivedEvents.Count);
             Assert.That(_uut.doorstate == DoorStates.DoorOpen);
-
         }
 
-
         //Test of OnDoorClose
-
         [Test]
         public void OnDoorCloseWhileOpen()
         {
             _uut.doorstate = DoorStates.DoorOpen;
             _uut.OnDoorClose();
             Assert.That(_uut.doorstate == DoorStates.DoorClosed);
-
         }
-
 
         [Test]
         public void OnDoorCloseWhileClosed()
         {
-
             List<DoorStates> receivedEvents = new List<DoorStates>();
 
-            _uut.DoorEvent += delegate (object sender, DoorEventArgs e)
-            {
-                receivedEvents.Add(e.States);
-            };
+            _uut.DoorEvent += delegate(object sender, DoorEventArgs e) { receivedEvents.Add(e.States); };
 
             _uut.doorstate = DoorStates.DoorClosed;
             _uut.OnDoorClose();
 
             Assert.AreEqual(0, receivedEvents.Count);
             Assert.That(_uut.doorstate == DoorStates.DoorClosed);
-
         }
-
-
-
-
-        //Test of DoorChangedEvent
-
-        [Test]
-        public void DoorChangedEvent()
-        {
-
-            List<DoorStates> receivedEvents = new List<DoorStates>();
-
-            _uut.DoorEvent += delegate (object sender, DoorEventArgs e)
-            {
-                receivedEvents.Add(e.States);
-            };
-
-            _uut.doorstate = DoorStates.DoorClosed;
-            _uut.OnDoorOpen();
-            _uut.doorstate = DoorStates.DoorOpen;
-            _uut.OnDoorClose();
-
-            Assert.AreEqual(2, receivedEvents.Count);
-            Assert.AreEqual(DoorStates.DoorOpen, receivedEvents[0]);
-            Assert.AreEqual(DoorStates.DoorClosed, receivedEvents[1]);
-
-        }
-
-
-
     }
 }
-

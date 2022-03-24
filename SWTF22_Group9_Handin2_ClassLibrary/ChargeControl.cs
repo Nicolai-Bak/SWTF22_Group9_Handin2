@@ -25,7 +25,7 @@ public class ChargeControl : IChargeControl
         _usbCharger.StopCharge();
     }
 
-    public bool isConnected()
+    public bool IsConnected()
     {
         if(_usbCharger.Connected)
             return true;

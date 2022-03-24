@@ -38,7 +38,7 @@ namespace SWTF22_Group9_Handin2.Test.Unit
             RfidEventArgs rfidEventArgs = new RfidEventArgs { Id = id };
 
             // Act
-            _chargeControl.IsConnected().Returns(connected);
+            _chargeControl.isConnected().Returns(connected);
             _rfidReader.RfidEvent += Raise.EventWith(rfidEventArgs);
 
             // Assert
@@ -62,7 +62,7 @@ namespace SWTF22_Group9_Handin2.Test.Unit
             RfidEventArgs rfidEventArgs = new RfidEventArgs { Id = id };
 
             // Act
-            _chargeControl.IsConnected().Returns(connected);
+            _chargeControl.isConnected().Returns(connected);
             _rfidReader.RfidEvent += Raise.EventWith(rfidEventArgs);
 
 

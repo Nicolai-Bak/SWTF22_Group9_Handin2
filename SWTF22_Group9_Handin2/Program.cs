@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using SWTF22_Group9_Handin2_ClassLibrary;
+using UsbSimulator;
 
 UsbChargerSimulator usbCharger = new UsbChargerSimulator();
 DoorSimulator door = new DoorSimulator();

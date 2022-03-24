@@ -4,7 +4,7 @@ public class Available : State
 {
     public override void HandleRfidEvent(StationControl s, RfidEventArgs a)
     {
-        if (s.Charger.IsConnected())
+        if (s.Charger.isConnected())
         {
             s.Door.LockDoor();
             s.Charger.StartCharging();
